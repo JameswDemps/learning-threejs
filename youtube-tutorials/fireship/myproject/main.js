@@ -18,7 +18,9 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize( window.innerWidth, window.innerHeight )
 
-camera.position.setZ(30)
+const initialCameraPosition = 30
+
+camera.position.setZ(initialCameraPosition)
 
 
 const geometry = new THREE.TorusGeometry(10, 3, 16, 100)
@@ -70,6 +72,10 @@ const moon = new THREE.Mesh(
     new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: normalTexture } )
 )
 
+// set or equals do that same thing
+moon.position.z = 30
+moon.position.setX(-10)
+
 scene.add(moon)
 
 Array(200).fill().forEach(addStar)
@@ -90,3 +96,20 @@ function animate() {
 }
 
 animate()
+
+function moveCamera() {
+
+    const t = document.body.getBoundingClientRect().top
+    moon.rotation.x += 0.05
+    moon.rotation.y += 0.075
+    moon.rotation.z += 0.05
+
+    jeff.rotation.y += 0.01
+    jeff.rotation.z += 0.01
+
+    camera.position.z = initialCameraPosition + t * -0.1
+    camera.position.x = initialCameraPosition + t * -0.002
+    camera.rotation.y = initialCameraPosition + t * -0.002
+}
+
+document.body.onscroll = moveCamera
